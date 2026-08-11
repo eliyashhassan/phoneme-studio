@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Phoneme Studio — CSE3CWA Assessment 1
 
-## Getting Started
+## IMPORTANT: assignment setup requirement
+The assessment brief says the project MUST be created from `npx create-next-app .`.
 
-First, run the development server:
+Recommended local setup:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+mkdir phoneme-studio
+cd phoneme-studio
+npx create-next-app .
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Choose TypeScript + App Router. Then replace the generated `app`, `components`, and configuration files with the supplied project files.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install lucide-react
+npm run dev
+```
 
-## Learn More
+Open http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+## Pages
+- Home
+- About
+- Wordle
+- Word Search
+- Settings
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Assessment features
+- Responsive premium builder interface
+- Phoneme-first Wordle preview
+- Phoneme Word Search preview
+- Light/dark theme persisted in cookie
+- Standalone `.html` download from both activity builders
+- Modular reusable components
+- Responsive navigation and hamburger menu
+- Accessibility-oriented labels, hover titles, focusable controls
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Before submission
+1. Add your final About-page walkthrough video or embed/link appropriate to your submission.
+2. Test both generated HTML files by opening them directly in Chrome/Edge.
+3. Test mobile layout in DevTools.
+4. Push meaningful commits to GitHub.
+5. Remove `node_modules` from the ZIP.
+6. Complete AI acknowledgement.

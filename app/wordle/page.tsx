@@ -1,0 +1,2 @@
+import WordleBuilder from '@/components/WordleBuilder';
+export default function WordlePage(){return <section className="section-pad"><div className="builder-heading"><div><span className="eyebrow">Activity builder</span><h1 className="page-title">Phoneme Wordle</h1><p>Configure a phoneme target, preview the game and export a standalone activity.</p></div><span className="status-pill">Frontend only</span></div><WordleBuilder/></section>}

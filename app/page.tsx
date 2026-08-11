@@ -1,69 +1,46 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { ArrowRight, Download, MousePointer2, Sparkles, Volume2, Search } from 'lucide-react';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <section className="hero section-pad">
+        <div className="hero-copy">
+          <span className="eyebrow"><Sparkles size={15}/> Built for Speech Pathology teaching</span>
+          <h1>Build phoneme activities your students can <span>see, explore and play.</span></h1>
+          <p>Create classroom-ready Wordle and Word Search activities with phoneme-first interaction, live preview and one-click standalone HTML export.</p>
+          <div className="hero-actions">
+            <Link className="btn primary" href="/wordle">Build a Wordle <ArrowRight size={18}/></Link>
+            <Link className="btn secondary" href="/word-search">Create Word Search</Link>
+          </div>
+          <div className="trust-row">
+            <span><MousePointer2 size={17}/> Hover phoneme hints</span>
+            <span><Download size={17}/> Offline HTML export</span>
+            <span><Volume2 size={17}/> Phoneme-first design</span>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="hero-preview" aria-label="Product preview">
+          <div className="preview-window">
+            <div className="window-bar"><span/><span/><span/><b>Live Preview</b></div>
+            <div className="preview-body">
+              <div className="mini-badge">WORDLE · 3 PHONEMES</div>
+              <h3>Find the phoneme word</h3>
+              <div className="tile-row"><div className="tile correct">θ</div><div className="tile present">ɪ</div><div className="tile">n</div></div>
+              <div className="phoneme-hint"><b>/θ/</b><span>TH (as in thin)</span></div>
+              <div className="keyboard-row"><kbd>θ</kbd><kbd>ð</kbd><kbd>ʃ</kbd><kbd>tʃ</kbd><kbd>ɪ</kbd></div>
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="section-pad features-section">
+        <div className="section-heading"><span className="eyebrow">Two focused tools</span><h2>One builder. Two classroom formats.</h2><p>Designed to keep configuration simple for teachers while making the student-facing activity clear and engaging.</p></div>
+        <div className="feature-grid">
+          <article className="feature-card accent-a"><div className="icon-box"><Volume2/></div><h3>Phoneme Wordle</h3><p>Create a single phoneme-based target word with familiar Wordle feedback and phonetic hints.</p><Link href="/wordle">Open builder <ArrowRight size={16}/></Link></article>
+          <article className="feature-card accent-b"><div className="icon-box"><Search/></div><h3>Phoneme Word Search</h3><p>Generate a classroom puzzle from a compact phoneme word list with selectable cells and answer reveal.</p><Link href="/word-search">Open builder <ArrowRight size={16}/></Link></article>
+          <article className="feature-card"><div className="icon-box"><Download/></div><h3>Standalone HTML</h3><p>Export the configured activity as one playable HTML file that opens in a normal browser without the builder.</p><span className="muted-link">No database required</span></article>
+        </div>
+      </section>
+    </>
   );
 }

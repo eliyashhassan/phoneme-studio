@@ -1,0 +1,2 @@
+import WordSearchBuilder from '@/components/WordSearchBuilder';
+export default function WordSearchPage(){return <section className="section-pad"><div className="builder-heading"><div><span className="eyebrow">Activity builder</span><h1 className="page-title">Phoneme Word Search</h1><p>Build a compact phoneme-recognition puzzle from a five-word classroom list.</p></div><span className="status-pill">5-word activity</span></div><WordSearchBuilder/></section>}
