@@ -1,11 +1,31 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Download, RefreshCw, Eye, RotateCcw } from "lucide-react";
 
 type WordEntry = {
+  id?: number;
   label: string;
   phonemes: string[];
+  hint?: string | null;
+};
+
+type ApiWord = {
+  id: number;
+  englishWord: string;
+  phonemes: string[];
+  hint: string | null;
+};
+
+type Activity = {
+  id: number;
+  name: string;
+  type: string;
+  difficulty: string;
+  rows: number;
+  columns: number;
+  showHints: boolean;
+  words: ApiWord[];
 };
 
 type Coord = {
@@ -186,6 +206,12 @@ function buildPuzzle(rows: number, cols: number, words: WordEntry[]) {
 export default function WordSearchBuilder() {
   const [rows, setRows] = useState(10);
   const [cols, setCols] = useState(10);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [selectedActivityId, setSelectedActivityId] = useState<number | null>(null);
+  const [dbWords, setDbWords] = useState<WordEntry[]>([]);
+  const [loadingDb, setLoadingDb] = useState(true);
+  const [hydrated, setHydrated] = useState(false);
+  const [dbMessage, setDbMessage] = useState("Loading stored Word Search data...");
   const [version, setVersion] = useState(0);
   const [startCell, setStartCell] = useState<Coord | null>(null);
   const [hoverCell, setHoverCell] = useState<Coord | null>(null);
@@ -195,9 +221,59 @@ export default function WordSearchBuilder() {
     "Drag across a phoneme word to select it."
   );
 
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    async function loadDatabaseData() {
+      try {
+        const response = await fetch("/api/activities", { cache: "no-store" });
+        if (!response.ok) throw new Error("Could not load activities");
+
+        const data: Activity[] = await response.json();
+        const searchActivities = data.filter(
+          (activity) => activity.type === "word-search"
+        );
+
+        setActivities(searchActivities);
+
+        if (searchActivities.length) {
+          const first = searchActivities[0];
+          setSelectedActivityId(first.id);
+          setRows(first.rows);
+          setCols(first.columns);
+          setDbWords(
+            first.words.map((item) => ({
+              id: item.id,
+              label: item.englishWord,
+              phonemes: item.phonemes,
+              hint: item.hint,
+            }))
+          );
+          setDbMessage(
+            first.words.length
+              ? "Loaded from PostgreSQL"
+              : "This configuration has no stored words yet."
+          );
+        } else {
+          setDbMessage(
+            "No Word Search configuration found. Create one in Teacher Manager."
+          );
+        }
+      } catch {
+        setDbMessage("Database unavailable.");
+      } finally {
+        setLoadingDb(false);
+      }
+    }
+
+    loadDatabaseData();
+  }, []);
+
   const puzzle = useMemo(
-    () => buildPuzzle(rows, cols, DEFAULT_WORDS),
-    [rows, cols, version]
+    () => buildPuzzle(rows, cols, dbWords),
+    [rows, cols, version, dbWords]
   );
 
   const activePath = useMemo(() => {
@@ -291,7 +367,7 @@ export default function WordSearchBuilder() {
   }
 
   function generateHTML() {
-    const words = DEFAULT_WORDS.map((word) => ({
+    const words = dbWords.map((word) => ({
       label: word.label,
       phonemes: word.phonemes,
     }));
@@ -583,6 +659,15 @@ build();
     activePath.map((coord) => coordKey(coord.r, coord.c))
   );
 
+
+  if (!hydrated) {
+    return (
+      <div style={{ padding: "4rem 1rem", textAlign: "center" }}>
+        Loading Word Search...
+      </div>
+    );
+  }
+
   return (
     <div className="builder-grid">
       <aside className="builder-panel">
@@ -699,7 +784,7 @@ build();
           </div>
 
           <div className="word-pills">
-            {DEFAULT_WORDS.map((word) => (
+            {dbWords.map((word) => (
               <span
                 key={word.label}
                 className={

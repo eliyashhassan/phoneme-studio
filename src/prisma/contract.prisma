@@ -1,0 +1,30 @@
+// use prisma-8
+
+model Activity {
+  id          Int      @id @default(autoincrement())
+  name        String
+  type        String
+  difficulty  String   @default("medium")
+  maxGuesses  Int      @default(6)
+  rows        Int      @default(10)
+  columns     Int      @default(10)
+  showHints   Boolean  @default(true)
+
+  words       Word[]
+
+  createdAt   TimestamptzString @default(now())
+  updatedAt   temporal.updatedAtString()
+}
+
+model Word {
+  id          Int      @id @default(autoincrement())
+  englishWord String
+  hint        String?
+  phonemes    String[]
+
+  activityId  Int
+  activity    Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  createdAt   TimestamptzString @default(now())
+  updatedAt   temporal.updatedAtString()
+}

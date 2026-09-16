@@ -1,26 +1,34 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type WordItem = {
+  id: number;
   word: string;
   phonemes: string[];
+  hint?: string | null;
+};
+
+type ApiWord = {
+  id: number;
+  englishWord: string;
+  phonemes: string[];
+  hint: string | null;
+};
+
+type Activity = {
+  id: number;
+  name: string;
+  type: string;
+  difficulty: string;
+  maxGuesses: number;
+  words: ApiWord[];
 };
 
 type TileState = "correct" | "present" | "absent";
 
-const WORDS: WordItem[] = [
-  { word: "thin", phonemes: ["θ", "ɪ", "n"] },
-  { word: "then", phonemes: ["ð", "e", "n"] },
-  { word: "bad", phonemes: ["b", "æ", "d"] },
-  { word: "bed", phonemes: ["b", "e", "d"] },
-  { word: "boot", phonemes: ["b", "ʉː", "t"] },
-  { word: "chin", phonemes: ["tʃ", "ɪ", "n"] },
-  { word: "jam", phonemes: ["dʒ", "æ", "m"] },
-  { word: "ring", phonemes: ["ɹ", "ɪ", "ŋ"] },
-  { word: "fan", phonemes: ["f", "æ", "n"] },
-  { word: "van", phonemes: ["v", "æ", "n"] },
-  { word: "sun", phonemes: ["s", "ɐ", "n"] },
+const FALLBACK_WORDS: WordItem[] = [
+  { id: -1, word: "thin", phonemes: ["θ", "ɪ", "n"] },
 ];
 
 const KEYBOARD = [
@@ -78,19 +86,69 @@ function evaluateGuess(guess: string[], answer: string[]): TileState[] {
 export default function WordleBuilder() {
   const [targetIndex, setTargetIndex] = useState(0);
   const [difficulty, setDifficulty] = useState("Easy");
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [selectedActivityId, setSelectedActivityId] = useState<number | null>(null);
+  const [loadingDb, setLoadingDb] = useState(true);
+  const [dbMessage, setDbMessage] = useState("Loading stored Wordle data...");
   const [currentGuess, setCurrentGuess] = useState<string[]>([]);
   const [guesses, setGuesses] = useState<string[][]>([]);
   const [results, setResults] = useState<TileState[][]>([]);
   const [message, setMessage] = useState("");
   const [finished, setFinished] = useState(false);
 
-  const target = WORDS[targetIndex];
+  const selectedActivity =
+    activities.find((activity) => activity.id === selectedActivityId) ?? null;
 
-  const maxAttempts = useMemo(() => {
-    if (difficulty === "Hard") return 4;
-    if (difficulty === "Medium") return 5;
-    return 6;
-  }, [difficulty]);
+  const words: WordItem[] =
+    selectedActivity?.words?.length
+      ? selectedActivity.words.map((item) => ({
+          id: item.id,
+          word: item.englishWord,
+          phonemes: item.phonemes,
+          hint: item.hint,
+        }))
+      : FALLBACK_WORDS;
+
+  const target = words[Math.min(targetIndex, words.length - 1)] ?? FALLBACK_WORDS[0];
+
+  useEffect(() => {
+    async function loadDatabaseData() {
+      try {
+        const response = await fetch("/api/activities", { cache: "no-store" });
+        if (!response.ok) throw new Error("Could not load activities");
+
+        const data: Activity[] = await response.json();
+        const wordleActivities = data.filter((activity) => activity.type === "wordle");
+
+        setActivities(wordleActivities);
+
+        if (wordleActivities.length) {
+          setSelectedActivityId(wordleActivities[0].id);
+          setDifficulty(
+            wordleActivities[0].difficulty.charAt(0).toUpperCase() +
+              wordleActivities[0].difficulty.slice(1)
+          );
+          setDbMessage(
+            wordleActivities[0].words.length
+              ? "Loaded from PostgreSQL"
+              : "This configuration has no stored words yet."
+          );
+        } else {
+          setDbMessage("No Wordle configuration found. Create one in Teacher Manager.");
+        }
+      } catch {
+        setDbMessage("Database unavailable. Preview fallback is being shown.");
+      } finally {
+        setLoadingDb(false);
+      }
+    }
+
+    loadDatabaseData();
+  }, []);
+
+  const maxAttempts =
+    selectedActivity?.maxGuesses ??
+    (difficulty === "Hard" ? 4 : difficulty === "Medium" ? 5 : 6);
 
   function resetGame() {
     setCurrentGuess([]);
@@ -281,7 +339,7 @@ render();
           value={targetIndex}
           onChange={(e) => changeTarget(Number(e.target.value))}
         >
-          {WORDS.map((item, index) => (
+          {words.map((item, index) => (
             <option key={item.word} value={index}>
               {item.word} — /{item.phonemes.join(" ")}/
             </option>

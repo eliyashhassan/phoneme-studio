@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: phoneme
+      POSTGRES_PASSWORD: phoneme123
+      POSTGRES_DB: phoneme_studio
+    volumes:
+      - phoneme_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U phoneme -d phoneme_studio"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://phoneme:phoneme123@db:5432/phoneme_studio
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  phoneme_postgres_data:

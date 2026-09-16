@@ -346,3 +346,45 @@
   .interactive-search-grid{gap:4px;transform-origin:top center;max-width:100%;overflow:auto;justify-content:start;padding:4px}
   .search-cell{width:36px;height:36px;font-size:13px}
 }
+
+/* ===== A2 Teacher Manager Dark Theme ===== */
+
+.teacher-manager-card {
+  background: #111827 !important;
+  color: #f8fafc !important;
+  border: 1px solid #29364d !important;
+  border-radius: 18px;
+  padding: 20px;
+}
+
+.teacher-manager-card h2,
+.teacher-manager-card h3,
+.teacher-manager-card p,
+.teacher-manager-card label,
+.teacher-manager-card small,
+.teacher-manager-card strong,
+.teacher-manager-card div {
+  color: #f8fafc;
+}
+
+.teacher-manager-card input,
+.teacher-manager-card select {
+  background: #172033 !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+}
+
+.teacher-manager-card input::placeholder {
+  color: #94a3b8 !important;
+}
+
+.teacher-manager-status {
+  background: #172033 !important;
+  color: #dbeafe !important;
+  border: 1px solid #334155;
+}
+
+.teacher-manager-word {
+  background: #172033;
+  border-color: #334155 !important;
+}
