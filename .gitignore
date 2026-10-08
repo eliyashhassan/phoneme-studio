@@ -44,3 +44,6 @@ dist/
 .env
 .next/
 backup-a2/
+
+test-results/
+playwright-report/
