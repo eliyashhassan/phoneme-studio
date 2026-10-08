@@ -76,6 +76,20 @@ export default async function DashboardPage() {
         ))}
       </div>
 
+      <section style={{ marginTop: 32 }}>
+        <h2>Data Quality Alerts</h2>
+        {activities.filter(a => a.words.length === 0).length > 0 ? (
+          <p role="alert" style={{ color: "#b45309", fontWeight: 700 }}>
+            Warning: {activities.filter(a => a.words.length === 0).length}
+            {" "}saved activities have no words configured.
+          </p>
+        ) : (
+          <p style={{ color: "#15803d" }}>
+            No empty-word activity warnings detected.
+          </p>
+        )}
+      </section>
+
       <section style={{ marginTop: 40 }}>
         <h2>Saved Activity Configurations</h2>
         {activities.length === 0 ? (

@@ -655,6 +655,16 @@ build();
     anchor.remove();
 
     URL.revokeObjectURL(url);
+
+    void fetch("/api/metrics", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event_type: "generation",
+        activity_type: "word-search",
+        success: true
+      })
+    }).catch(console.error);
   }
 
   const activeKeys = new Set(
