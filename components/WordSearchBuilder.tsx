@@ -514,6 +514,8 @@ function build(){
       if(grid[rr][cc]&&grid[rr][cc]!==units[i])return false;
     }
     return true;
+
+    }
   }
 
   words.forEach(word=>{

@@ -279,6 +279,8 @@ function render(){
       row.appendChild(tile);
     }
     board.appendChild(row);
+
+    }
   }
 }
 

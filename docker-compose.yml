@@ -18,7 +18,7 @@ services:
     environment:
       DATABASE_URL: postgresql://phoneme:phoneme123@db:5432/phoneme_studio
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       db:
         condition: service_healthy
