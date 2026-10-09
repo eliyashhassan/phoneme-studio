@@ -3,7 +3,7 @@
 Student: Eliyash Hassan  
 Student ID: 22204648  
 Subject: CSE3CWA  
-Assessment: Assessment 2
+Assessment: Assessment 3 - Data-driven Application and Reporting
 
 ## Overview
 
@@ -148,3 +148,23 @@ Next.js. (2026). Next.js documentation. https://nextjs.org/docs
 PostgreSQL Global Development Group. (2026). PostgreSQL documentation. https://www.postgresql.org/docs/
 
 Prisma. (2026). Prisma documentation. https://www.prisma.io/docs/
+
+## Assessment 3 - Data-driven Application and Reporting
+
+### Dashboard and Observability
+The application includes a database-backed dashboard showing total activities, Wordle and Word Search counts, stored words, successful and failed generations, success rate, and average time on page.
+
+The dashboard includes data quality alerts for activities without stored words. The `/api/metrics` endpoint records usage events, and `/health` provides an operational health check.
+
+### Testing Evidence
+- Playwright: 4 automated tests passed for dashboard, Wordle page, Word Search page, and metrics API.
+- JMeter 5.6.3: health endpoint load tests with 1, 10, 100, 1000, and 10000 requests.
+- JMeter 1000 requests: 2 ms average response, 0% errors.
+- JMeter 10000 requests: 1060 ms average response, 0% errors.
+- The 10000-request test used 100 concurrent threads, not 10000 concurrent users.
+- Lighthouse dashboard accessibility score: 95/100, with a colour contrast issue identified.
+
+The JMeter plan and results are available in the jmeter directory. These health endpoint tests do not replace full builder workflow load testing.
+
+### GitHub Repository
+https://github.com/eliyashhassan/phoneme-studio/tree/assessment-3
