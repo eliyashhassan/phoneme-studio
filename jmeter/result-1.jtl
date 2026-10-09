@@ -1,0 +1,2 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1791505280803,173,Health Check,200,OK,Users 1-1,text,true,,341,133,1,1,http://host.docker.internal:3001/api/health,170,0,8
